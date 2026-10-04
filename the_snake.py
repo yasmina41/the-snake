@@ -114,10 +114,12 @@ class Snake(GameObject):
             self.last = None
 
     def reset(self):
-        """Сбрасывает змейку в начальное состояние со случайным направлением."""
+        """Сбрасывает змейку в начальное состояние."""
         self.length = 1
         self.positions = [CENTRAL_POSITION]
-        self.direction = choice([UP, DOWN, LEFT, RIGHT])
+        self.direction = choice(
+            [UP, DOWN, LEFT, RIGHT]
+        )
         self.next_direction = None
         self.last = None
 
