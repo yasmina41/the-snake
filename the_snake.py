@@ -2,7 +2,7 @@ from random import choice, randint
 
 import pygame
 
-# Константы для размеров поля и сетки:
+
 SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
 GRID_SIZE = 20
 GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
@@ -13,34 +13,33 @@ CENTRAL_POSITION = (
     (GRID_HEIGHT // 2) * GRID_SIZE
 )
 
-# Направления движения:
+
 UP = (0, -1)
 DOWN = (0, 1)
 LEFT = (-1, 0)
 RIGHT = (1, 0)
 
-# Цвет фона - черный:
+
 BOARD_BACKGROUND_COLOR = (0, 0, 0)
 
-# Цвет границы ячейки
+
 BORDER_COLOR = (93, 216, 228)
 
-# Цвет яблока
+
 APPLE_COLOR = (255, 0, 0)
 
-# Цвет змейки
+
 SNAKE_COLOR = (0, 255, 0)
 
-# Скорость движения змейки:
+
 SPEED = 20
 
-# Настройка игрового окна:
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
 
-# Заголовок окна игрового поля:
+
 pygame.display.set_caption('Змейка')
 
-# Настройка времени:
 clock = pygame.time.Clock()
 
 
@@ -60,7 +59,7 @@ class Apple(GameObject):
 
     def __init__(self, occupied_positions=None):
         super().__init__(APPLE_COLOR)
-        self.randomize_position(occupied_positions or [])
+        self.randomize_position(occupied_positions or [CENTRAL_POSITION])
 
     def randomize_position(self, occupied_positions=None):
         """Устанавливает случайное положение яблока вне змейки."""
@@ -117,9 +116,7 @@ class Snake(GameObject):
         """Сбрасывает змейку в начальное состояние."""
         self.length = 1
         self.positions = [CENTRAL_POSITION]
-        self.direction = choice(
-            [UP, DOWN, LEFT, RIGHT]
-        )
+        self.direction = choice([UP, DOWN, LEFT, RIGHT])
         self.next_direction = None
         self.last = None
 
@@ -177,14 +174,14 @@ def main():
         snake.update_direction()
         snake.move()
 
-        # Проверка столкновения змейки с самой собой
-        if snake.get_head_position() in snake.positions[2:]:
+        head_position = snake.get_head_position()
+
+        if head_position in snake.positions[2:]:
             snake.reset()
             screen.fill(BOARD_BACKGROUND_COLOR)
             apple.randomize_position(snake.positions)
 
-        # Проверка поедания яблока
-        if snake.get_head_position() == apple.position:
+        if head_position == apple.position:
             snake.length += 1
             apple.randomize_position(snake.positions)
 
